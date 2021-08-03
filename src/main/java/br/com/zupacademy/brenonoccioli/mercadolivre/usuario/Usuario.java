@@ -28,12 +28,12 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String email, SenhaEncodada senhaEncodada) {
+    public Usuario(String email, SenhaLimpa senha) {
         Assert.hasLength(email, "email não pode ser vazio");
-        Assert.notNull(senhaEncodada, "senha não pode ser nula");
+        Assert.notNull(senha, "senha não pode ser nula");
         this.email = email;
         //Já recebe a senha encodada
-        this.senhaEncodada = senhaEncodada.encode();
+        this.senhaEncodada = senha.encodar();
     }
 
     public String getEmail() {
@@ -42,5 +42,10 @@ public class Usuario {
 
     public LocalDateTime getDataCriacao() {
         return dataCriacao;
+    }
+
+
+    public String getSenhaEncodada() {
+        return senhaEncodada;
     }
 }
