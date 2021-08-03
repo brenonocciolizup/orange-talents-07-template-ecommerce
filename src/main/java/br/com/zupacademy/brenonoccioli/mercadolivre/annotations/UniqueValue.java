@@ -1,4 +1,4 @@
-package br.com.zupacademy.brenonoccioli.mercadolivre.anotacoes;
+package br.com.zupacademy.brenonoccioli.mercadolivre.annotations;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

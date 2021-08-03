@@ -28,21 +28,16 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String email, String senha) {
+    public Usuario(String email, SenhaEncodada senhaEncodada) {
         Assert.hasLength(email, "email não pode ser vazio");
-        Assert.notNull(email, "email não pode ser nulo");
-        Assert.isTrue(senha.length() >= 6, "senha precisa ter no mínimo 6 caracteres");
+        Assert.notNull(senhaEncodada, "senha não pode ser nula");
         this.email = email;
         //Já recebe a senha encodada
-        this.senhaEncodada = senha;
+        this.senhaEncodada = senhaEncodada.encode();
     }
 
     public String getEmail() {
         return email;
-    }
-
-    public String getSenhaEncodada() {
-        return senhaEncodada;
     }
 
     public LocalDateTime getDataCriacao() {

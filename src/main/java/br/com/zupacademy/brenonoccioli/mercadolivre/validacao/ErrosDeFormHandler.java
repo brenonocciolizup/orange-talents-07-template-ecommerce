@@ -27,9 +27,6 @@ public class ErrosDeFormHandler {
 
         List<ErroFormDto> dto = new ArrayList<>();
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
-        List<ObjectError> classErrors = exception.getBindingResult().getAllErrors();
-
-        System.out.println( "Chegou no field Errors!" + fieldErrors.toString());
 
         fieldErrors.forEach(e -> {
             String msg = messageSource.getMessage(e, LocaleContextHolder.getLocale());
