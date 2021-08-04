@@ -1,4 +1,4 @@
-package br.com.zupacademy.brenonoccioli.mercadolivre.config;
+package br.com.zupacademy.brenonoccioli.mercadolivre.config.seguranca;
 
 import br.com.zupacademy.brenonoccioli.mercadolivre.usuario.Usuario;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
 
-public class UsuarioLogado implements UserDetails {
+public class UsuarioLogado implements UserDetails{
 
     private Usuario usuario;
     private User springUserDetails;
@@ -44,15 +44,12 @@ public class UsuarioLogado implements UserDetails {
         return springUserDetails.isAccountNonLocked();
     }
 
-
-
     public boolean isCredentialsNonExpired() {
         return springUserDetails.isCredentialsNonExpired();
     }
-
-
 
     public Usuario get() {
         return usuario;
     }
 }
+

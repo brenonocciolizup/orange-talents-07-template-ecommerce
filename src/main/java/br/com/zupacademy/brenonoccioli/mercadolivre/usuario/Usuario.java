@@ -44,8 +44,8 @@ public class Usuario {
         return dataCriacao;
     }
 
-
     public String getSenhaEncodada() {
         return senhaEncodada;
     }
+
 }

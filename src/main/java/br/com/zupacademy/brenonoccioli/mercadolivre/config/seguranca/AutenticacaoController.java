@@ -1,6 +1,6 @@
 package br.com.zupacademy.brenonoccioli.mercadolivre.config.seguranca;
 
-import br.com.zupacademy.brenonoccioli.mercadolivre.config.seguranca.dto.LoginForm;
+import br.com.zupacademy.brenonoccioli.mercadolivre.config.seguranca.form.LoginForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth")
-public class UserAuthenticationController {
-
+@RequestMapping("/auth")
+public class AutenticacaoController {
 
     @Autowired
     private AuthenticationManager authManager;
@@ -27,7 +26,7 @@ public class UserAuthenticationController {
     private TokenManager tokenManager;
 
     private static final Logger log = LoggerFactory
-            .getLogger(UserAuthenticationController.class);
+            .getLogger(AutenticacaoController.class);
 
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -38,7 +37,7 @@ public class UserAuthenticationController {
 
         try {
             Authentication authentication = authManager.authenticate(authenticationToken);
-            String jwt = tokenManager.generateToken(authentication);
+            String jwt = tokenManager.gerarToken(authentication);
 
             return ResponseEntity.ok(jwt);
 
@@ -46,5 +45,6 @@ public class UserAuthenticationController {
             log.error("[Autenticacao] {}",e);
             return ResponseEntity.badRequest().build();
         }
+
     }
 }

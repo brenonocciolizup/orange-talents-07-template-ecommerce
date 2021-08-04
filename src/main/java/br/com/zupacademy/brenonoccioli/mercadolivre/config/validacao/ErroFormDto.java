@@ -1,4 +1,4 @@
-package br.com.zupacademy.brenonoccioli.mercadolivre.validacao;
+package br.com.zupacademy.brenonoccioli.mercadolivre.config.validacao;
 
 public class ErroFormDto {
 

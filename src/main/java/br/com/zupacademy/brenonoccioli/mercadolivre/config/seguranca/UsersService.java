@@ -1,6 +1,5 @@
 package br.com.zupacademy.brenonoccioli.mercadolivre.config.seguranca;
 
-import br.com.zupacademy.brenonoccioli.mercadolivre.config.AppUserDetailsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,4 +40,5 @@ public class UsersService implements UserDetailsService {
 
         return userDetailsMapper.map(objects.get(0));
     }
+
 }

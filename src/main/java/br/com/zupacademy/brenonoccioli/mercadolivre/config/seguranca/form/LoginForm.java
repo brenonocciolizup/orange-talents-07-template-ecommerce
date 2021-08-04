@@ -1,4 +1,4 @@
-package br.com.zupacademy.brenonoccioli.mercadolivre.config.seguranca.dto;
+package br.com.zupacademy.brenonoccioli.mercadolivre.config.seguranca.form;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
@@ -15,11 +15,11 @@ public class LoginForm {
         this.email = email;
     }
 
-    public String getPassword() {
+    public String getSenha() {
         return senha;
     }
 
-    public void setPassword(String password) {
+    public void setSenha(String password) {
         this.senha = password;
     }
 

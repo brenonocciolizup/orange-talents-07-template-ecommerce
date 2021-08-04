@@ -19,7 +19,7 @@ public class TokenManager {
     @Value("${jwt.expiration}")
     private long expirationInMillis;
 
-    public String generateToken(Authentication authentication) {
+    public String gerarToken(Authentication authentication) {
 
         UserDetails user = (UserDetails) authentication.getPrincipal();
 
@@ -27,7 +27,7 @@ public class TokenManager {
         final Date expiration = new Date(now.getTime() + this.expirationInMillis);
 
         return Jwts.builder()
-                .setIssuer("Desafio mercado livre Orange Talents")
+                .setIssuer("Desafio jornada dev eficiente mercado livre")
                 .setSubject(user.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(expiration)

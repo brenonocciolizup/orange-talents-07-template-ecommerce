@@ -27,7 +27,6 @@ import java.io.IOException;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
     @Autowired
     private UsersService usersService;
 
@@ -38,16 +37,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private static final Logger log = LoggerFactory
             .getLogger(SecurityConfiguration.class);
 
+
     @Override
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
-
-    //configura autorizações
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/produtos/{id:[0-9]+}").permitAll()
                 .antMatchers(HttpMethod.POST, "/usuarios/cadastrar").permitAll()
                 .antMatchers("/auth/**").permitAll()
@@ -63,6 +63,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint());
+
     }
 
     @Override
@@ -89,4 +90,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Você não está autorizado a acessar esse recurso.");
         }
     }
+
 }
