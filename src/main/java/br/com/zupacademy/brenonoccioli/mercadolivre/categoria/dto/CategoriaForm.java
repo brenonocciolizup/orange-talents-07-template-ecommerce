@@ -22,21 +22,21 @@ public class CategoriaForm {
         this.idCategoriaMae = idCategoria;
     }
 
-    public Categoria toModel(CategoriaRepository repository){
-        if(idCategoriaMae == null){
-            return new Categoria(nome, null);
-        }
-
-        Categoria categoriaMae = repository.findById(idCategoriaMae).get();
-
-        return new Categoria(nome, categoriaMae);
-    }
-
     public String getNome() {
         return nome;
     }
 
     public Long getIdCategoriaMae(){
         return idCategoriaMae;
+    }
+
+    public Categoria toModel(CategoriaRepository repository){
+        if(idCategoriaMae == null){
+            return new Categoria(nome);
+        }
+
+        Categoria categoriaMae = repository.findById(idCategoriaMae).get();
+
+        return new Categoria(nome, categoriaMae);
     }
 }
