@@ -5,6 +5,7 @@ import org.springframework.util.Assert;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 public class Usuario {
@@ -48,4 +49,16 @@ public class Usuario {
         return senhaEncodada;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(email, usuario.email) && Objects.equals(senhaEncodada, usuario.senhaEncodada);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(email, senhaEncodada);
+    }
 }

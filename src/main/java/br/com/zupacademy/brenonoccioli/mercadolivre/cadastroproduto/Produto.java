@@ -3,6 +3,7 @@ package br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto;
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.form.CaracteristicasDoProdutoForm;
 import br.com.zupacademy.brenonoccioli.mercadolivre.categoria.Categoria;
 import br.com.zupacademy.brenonoccioli.mercadolivre.usuario.Usuario;
+import com.fasterxml.classmate.AnnotationOverrides;
 
 
 import javax.persistence.*;
@@ -10,8 +11,7 @@ import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+
 import java.util.Set;
 
 
@@ -47,6 +47,9 @@ public class Produto {
     @NotNull
     @ManyToOne
     private Usuario dono;
+
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private Set<ImagemProduto> imagens = new HashSet<>();
 
     @Deprecated
     public Produto() {
@@ -95,4 +98,17 @@ public class Produto {
     public Usuario getDono() {
         return dono;
     }
+
+    public Set<ImagemProduto> getImagens() {
+        return imagens;
+    }
+
+    public void insereImagem(Set<String> links) {
+        links.forEach(link -> {
+            ImagemProduto img = new ImagemProduto(this, link);
+            this.imagens.add(img);
+        });
+    }
+
+
 }

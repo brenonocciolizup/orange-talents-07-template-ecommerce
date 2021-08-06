@@ -6,7 +6,6 @@ import br.com.zupacademy.brenonoccioli.mercadolivre.categoria.CategoriaRepositor
 import br.com.zupacademy.brenonoccioli.mercadolivre.config.seguranca.UsuarioLogado;
 import br.com.zupacademy.brenonoccioli.mercadolivre.config.validacao.CaracteristicasNomeUnicoValidator;
 import br.com.zupacademy.brenonoccioli.mercadolivre.usuario.Usuario;
-import br.com.zupacademy.brenonoccioli.mercadolivre.usuario.UsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,20 +14,23 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoController {
     @Autowired
-    CategoriaRepository categoriaRepository;
+    private CategoriaRepository categoriaRepository;
     @Autowired
-    UsuarioRepository usuarioRepository;
+    private ProdutoRepository produtoRepository;
     @Autowired
-    ProdutoRepository produtoRepository;
+    private UploaderImagens uploaderImagens;
 
 
-    @InitBinder
+    @InitBinder(value = "ProdutoForm")
     public void init(WebDataBinder webDataBinder){
         webDataBinder.addValidators(new CaracteristicasNomeUnicoValidator());
     }
@@ -42,6 +44,29 @@ public class ProdutoController {
         produtoRepository.save(produto);
 
         return ResponseEntity.ok().body(new ProdutoDto(produto));
+    }
+
+    @PostMapping("/{id}/cadastrar-imagem")
+    public ResponseEntity<Produto> cadastraImagem(@PathVariable("id") Long id,
+                                                  @Valid ImagemProdutoForm form,
+                                                  @AuthenticationPrincipal UsuarioLogado usuarioLogado){
+        //pegando links das imagens
+        Set<String> links = uploaderImagens.enviar(form.getImagens());
+
+        //pega produto passado na url para inserir a imagem
+        Optional<Produto> produtoOptional = produtoRepository.findById(id);
+
+       if(produtoOptional.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        } else if (!produtoOptional.get().getDono().equals(usuarioLogado.get())){
+           return ResponseEntity.status(403).build();
+       }
+
+        Produto produto = produtoOptional.get();
+        produto.insereImagem(links);
+        produtoRepository.save(produto);
+
+        return ResponseEntity.ok().build();
 
     }
 }
