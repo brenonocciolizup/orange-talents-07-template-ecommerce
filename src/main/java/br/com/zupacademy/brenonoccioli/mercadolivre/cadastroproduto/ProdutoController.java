@@ -1,8 +1,11 @@
 package br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto;
 
+import br.com.zupacademy.brenonoccioli.mercadolivre.adicionapergunta.PerguntaSobreProduto;
+import br.com.zupacademy.brenonoccioli.mercadolivre.adicionapergunta.dto.PerguntaSobreProdutoDto;
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.dto.ProdutoDto;
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.form.ImagemProdutoForm;
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.form.OpiniaoSobreProdutoForm;
+import br.com.zupacademy.brenonoccioli.mercadolivre.adicionapergunta.form.PerguntaSobreProdutoForm;
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.form.ProdutoForm;
 import br.com.zupacademy.brenonoccioli.mercadolivre.categoria.CategoriaRepository;
 import br.com.zupacademy.brenonoccioli.mercadolivre.config.seguranca.UsuarioLogado;
@@ -94,4 +97,6 @@ public class ProdutoController {
 
         return ResponseEntity.ok().build();
     }
+
+
 }

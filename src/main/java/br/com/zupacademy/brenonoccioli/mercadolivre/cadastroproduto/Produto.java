@@ -1,9 +1,9 @@
 package br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto;
 
+import br.com.zupacademy.brenonoccioli.mercadolivre.adicionapergunta.PerguntaSobreProduto;
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.form.CaracteristicasDoProdutoForm;
 import br.com.zupacademy.brenonoccioli.mercadolivre.categoria.Categoria;
 import br.com.zupacademy.brenonoccioli.mercadolivre.usuario.Usuario;
-import com.fasterxml.classmate.AnnotationOverrides;
 
 
 import javax.persistence.*;
@@ -55,6 +55,9 @@ public class Produto {
 
     @OneToMany(mappedBy = "produto")
     private List<OpiniaoSobreProduto> opinioes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "produto")
+    private List<PerguntaSobreProduto> perguntas = new ArrayList<>();
 
     @Deprecated
     public Produto() {
