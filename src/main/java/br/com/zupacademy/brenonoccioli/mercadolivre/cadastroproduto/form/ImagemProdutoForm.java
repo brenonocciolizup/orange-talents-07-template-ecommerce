@@ -1,4 +1,4 @@
-package br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto;
+package br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.form;
 
 import org.springframework.web.multipart.MultipartFile;
 

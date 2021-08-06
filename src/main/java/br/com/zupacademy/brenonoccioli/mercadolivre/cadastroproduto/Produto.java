@@ -10,8 +10,10 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -50,6 +52,9 @@ public class Produto {
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
     private Set<ImagemProduto> imagens = new HashSet<>();
+
+    @OneToMany(mappedBy = "produto")
+    private List<OpiniaoSobreProduto> opinioes = new ArrayList<>();
 
     @Deprecated
     public Produto() {
@@ -111,4 +116,7 @@ public class Produto {
     }
 
 
+    public void adicionaOpiniao(OpiniaoSobreProduto opiniao) {
+        this.opinioes.add(opiniao);
+    }
 }

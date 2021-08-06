@@ -1,6 +1,8 @@
 package br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto;
 
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.dto.ProdutoDto;
+import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.form.ImagemProdutoForm;
+import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.form.OpiniaoSobreProdutoForm;
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.form.ProdutoForm;
 import br.com.zupacademy.brenonoccioli.mercadolivre.categoria.CategoriaRepository;
 import br.com.zupacademy.brenonoccioli.mercadolivre.config.seguranca.UsuarioLogado;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -28,6 +29,8 @@ public class ProdutoController {
     private ProdutoRepository produtoRepository;
     @Autowired
     private UploaderImagens uploaderImagens;
+    @Autowired
+    private OpiniaoRepository opiniaoRepository;
 
 
     @InitBinder(value = "ProdutoForm")
@@ -47,7 +50,7 @@ public class ProdutoController {
     }
 
     @PostMapping("/{id}/cadastrar-imagem")
-    public ResponseEntity<Produto> cadastraImagem(@PathVariable("id") Long id,
+    public ResponseEntity cadastraImagem(@PathVariable("id") Long id,
                                                   @Valid ImagemProdutoForm form,
                                                   @AuthenticationPrincipal UsuarioLogado usuarioLogado){
         //pegando links das imagens
@@ -67,6 +70,28 @@ public class ProdutoController {
         produtoRepository.save(produto);
 
         return ResponseEntity.ok().build();
+    }
 
+    @PostMapping("/{id}/opiniao")
+    public ResponseEntity postarOpiniao(@PathVariable("id") Long idProduto,
+                              @RequestBody @Valid OpiniaoSobreProdutoForm form,
+                              @AuthenticationPrincipal UsuarioLogado usuarioLogado){
+
+        Optional<Produto> produtoOptional = produtoRepository.findById(idProduto);
+        if(produtoOptional.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        Produto produto = produtoOptional.get();
+        Usuario donoOpiniao = usuarioLogado.get();
+        if(produto.getDono().equals(donoOpiniao)){
+            return ResponseEntity.badRequest().body("Você não pode dar opinião em seu próprio produto");
+        }
+
+        OpiniaoSobreProduto opiniao = form.toModel(donoOpiniao, produto);
+        produto.adicionaOpiniao(opiniao);
+        opiniaoRepository.save(opiniao);
+
+        return ResponseEntity.ok().build();
     }
 }
