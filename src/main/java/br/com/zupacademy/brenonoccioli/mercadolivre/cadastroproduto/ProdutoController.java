@@ -1,11 +1,9 @@
 package br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto;
 
-import br.com.zupacademy.brenonoccioli.mercadolivre.adicionapergunta.PerguntaSobreProduto;
-import br.com.zupacademy.brenonoccioli.mercadolivre.adicionapergunta.dto.PerguntaSobreProdutoDto;
+import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.dto.DetalheProdutoDto;
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.dto.ProdutoDto;
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.form.ImagemProdutoForm;
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.form.OpiniaoSobreProdutoForm;
-import br.com.zupacademy.brenonoccioli.mercadolivre.adicionapergunta.form.PerguntaSobreProdutoForm;
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.form.ProdutoForm;
 import br.com.zupacademy.brenonoccioli.mercadolivre.categoria.CategoriaRepository;
 import br.com.zupacademy.brenonoccioli.mercadolivre.config.seguranca.UsuarioLogado;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -34,6 +33,8 @@ public class ProdutoController {
     private UploaderImagens uploaderImagens;
     @Autowired
     private OpiniaoRepository opiniaoRepository;
+    @Autowired
+    private CalculadorDeNotas calculadorDeNotas;
 
 
     @InitBinder(value = "ProdutoForm")
@@ -98,5 +99,15 @@ public class ProdutoController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{id}/detalhes")
+    public ResponseEntity<DetalheProdutoDto> detalhesDoProduto(@PathVariable("id") Long id){
+        Optional<Produto> produtoOptional = produtoRepository.findById(id);
+        if(produtoOptional.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+        Produto produto = produtoOptional.get();
+        double mediaNotas = calculadorDeNotas.calculaMediaDeNotas(produto);
 
+        return ResponseEntity.ok().body(new DetalheProdutoDto(produto, mediaNotas));
+    }
 }

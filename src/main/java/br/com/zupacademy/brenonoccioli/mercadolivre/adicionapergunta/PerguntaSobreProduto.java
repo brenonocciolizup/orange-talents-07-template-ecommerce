@@ -42,8 +42,8 @@ public class PerguntaSobreProduto {
         return titulo;
     }
 
-    public Produto getProduto() {
-        return produto;
+    public String getDonoPergunta() {
+        return dono.getEmail();
     }
 
     public LocalDateTime getInstanteCriacao() {

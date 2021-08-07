@@ -75,6 +75,10 @@ public class Produto {
         caracteristicasForm.forEach(c -> this.caracteristicas.add(c.toModel(this)));
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -109,6 +113,14 @@ public class Produto {
 
     public Set<ImagemProduto> getImagens() {
         return imagens;
+    }
+
+    public List<OpiniaoSobreProduto> getOpinioes() {
+        return opinioes;
+    }
+
+    public List<PerguntaSobreProduto> getPerguntas() {
+        return perguntas;
     }
 
     public void insereImagem(Set<String> links) {
