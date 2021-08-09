@@ -4,6 +4,7 @@ import br.com.zupacademy.brenonoccioli.mercadolivre.adicionapergunta.PerguntaSob
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.form.CaracteristicasDoProdutoForm;
 import br.com.zupacademy.brenonoccioli.mercadolivre.categoria.Categoria;
 import br.com.zupacademy.brenonoccioli.mercadolivre.usuario.Usuario;
+import org.springframework.util.Assert;
 
 
 import javax.persistence.*;
@@ -133,5 +134,17 @@ public class Produto {
 
     public void adicionaOpiniao(OpiniaoSobreProduto opiniao) {
         this.opinioes.add(opiniao);
+    }
+
+    public boolean abateEstoque(int quantidade) {
+        Assert.isTrue(quantidade > 0,
+                "A quantidade deve ser maior que zero para realizar uma compra "+quantidade);
+
+        if(quantidade > this.quantidade){
+            return false;
+        }
+
+        this.quantidade -= quantidade;
+        return true;
     }
 }

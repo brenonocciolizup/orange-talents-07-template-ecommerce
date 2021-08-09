@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class EnviadorDeEmails {
 
-    public void enviaEmail(Usuario donoPergunta, Usuario donoProduto){
-        System.out.println("E-mail enviado para "+donoProduto.getEmail()+
-                " com a pergunta de " + donoPergunta.getEmail());
+    public void enviaEmail(Usuario cliente, Usuario vendedor){
+        System.out.println("E-mail enviado para "+vendedor.getEmail()+
+                " com a pergunta de " + cliente.getEmail());
     }
 }

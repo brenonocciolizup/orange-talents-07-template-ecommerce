@@ -37,6 +37,10 @@ public class Usuario {
         this.senhaEncodada = senha.encodar();
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getEmail() {
         return email;
     }
