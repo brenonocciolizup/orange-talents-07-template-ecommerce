@@ -36,7 +36,7 @@ public class CompraForm {
         return quantidade;
     }
 
-    public GatewayPagamento getGatewayPagamento() {
+    public GatewayPagamento getGateway() {
         return gateway;
     }
 }

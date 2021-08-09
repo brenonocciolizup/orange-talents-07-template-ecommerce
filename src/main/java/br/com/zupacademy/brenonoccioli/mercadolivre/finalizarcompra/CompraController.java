@@ -8,6 +8,9 @@ import br.com.zupacademy.brenonoccioli.mercadolivre.finalizarcompra.form.Retorno
 import br.com.zupacademy.brenonoccioli.mercadolivre.finalizarcompra.form.RetornoPaypalForm;
 import br.com.zupacademy.brenonoccioli.mercadolivre.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.Set;
 
 
@@ -37,9 +41,9 @@ public class CompraController {
 
     @PostMapping("/compras")
     @Transactional
-    public String compraProduto(@RequestBody @Valid CompraForm form,
-                              @AuthenticationPrincipal UsuarioLogado usuarioLogado,
-                              UriComponentsBuilder uriComponentsBuilder) throws BindException {
+    public ResponseEntity<?> compraProduto(@RequestBody @Valid CompraForm form,
+                                        @AuthenticationPrincipal UsuarioLogado usuarioLogado,
+                                        UriComponentsBuilder uriComponentsBuilder) throws BindException {
 
         Produto produtoEmCompra = em.find(Produto.class, form.getIdProduto());
         int quantidade = form.getQuantidade();
@@ -47,13 +51,15 @@ public class CompraController {
 
         if(estoqueAbatido){
             Usuario comprador = usuarioLogado.get();
-            GatewayPagamento gateway = form.getGatewayPagamento();
+            GatewayPagamento gateway = form.getGateway();
 
             Compra novaCompra = new Compra(produtoEmCompra, quantidade, comprador, gateway);
             //hibernate faz a sincornização do estado da classe produto
             em.persist(novaCompra);
             enviadorDeEmails.enviaEmail(comprador, produtoEmCompra.getDono());
-            return novaCompra.redirecionamentoUrl(uriComponentsBuilder);
+
+            return ResponseEntity.status(HttpStatus.FOUND).body(novaCompra.redirecionamentoUrl(uriComponentsBuilder));
+
         }
 
         BindException estoqueInsuficiente = new BindException(form, "compraForm");
@@ -72,7 +78,7 @@ public class CompraController {
     @PostMapping("/retorno-paypal/{id}")
     @Transactional
     public String processaPaypal(@PathVariable("id") Long idCompra,
-                                    @Valid RetornoGatewayPagamento form){
+                                    @Valid RetornoPaypalForm form){
         return processa(idCompra, form);
 
     }
