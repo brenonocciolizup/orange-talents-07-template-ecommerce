@@ -7,33 +7,34 @@ import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.OpiniaoSobre
 import br.com.zupacademy.brenonoccioli.mercadolivre.cadastroproduto.Produto;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DetalheProdutoDto {
 
     private Set<ImagemProduto> links;
     private String nome;
     private BigDecimal preco;
-    private Set<CaracteristicasDoProduto> caracteristicas = new HashSet<>();
+    private Set<DetalheCaracteristicaDto> caracteristicas = new HashSet<>();
     private String descricao;
     private Double mediaNotas;
     private Integer quantidadeNotas;
-    private List<OpiniaoSobreProduto> opinioes;
-    private List<PerguntaSobreProduto> perguntas;
+    private List<DetalheOpiniaoDto> opinioes;
+    private List<DetalhePerguntasDto> perguntas;
 
     public DetalheProdutoDto(Produto produto, double mediaNotas) {
         this.links = produto.getImagens();
         this.nome = produto.getNome();
         this.preco = produto.getPreco();
-        this.caracteristicas = produto.getCaracteristicas();
+        this.caracteristicas = produto.getCaracteristicas().stream()
+                .map(DetalheCaracteristicaDto::new).collect(Collectors.toSet());
         this.descricao = produto.getDescricao();
         this.mediaNotas = mediaNotas;
         this.quantidadeNotas = produto.getOpinioes().size();
-        this.opinioes = produto.getOpinioes();
-        this.perguntas = produto.getPerguntas();
+        this.opinioes = produto.getOpinioes().stream().map(DetalheOpiniaoDto::new).collect(Collectors.toList());
+        this.perguntas = produto.getPerguntas().stream().map(DetalhePerguntasDto::new).collect(Collectors.toList());
     }
 
     public Set<ImagemProduto> getLinks() {
@@ -48,7 +49,7 @@ public class DetalheProdutoDto {
         return preco;
     }
 
-    public Set<CaracteristicasDoProduto> getCaracteristicas() {
+    public Set<DetalheCaracteristicaDto> getCaracteristicas() {
         return caracteristicas;
     }
 
@@ -64,11 +65,11 @@ public class DetalheProdutoDto {
         return quantidadeNotas;
     }
 
-    public List<OpiniaoSobreProduto> getOpinioes() {
+    public List<DetalheOpiniaoDto> getOpinioes() {
         return opinioes;
     }
 
-    public List<PerguntaSobreProduto> getPerguntas() {
+    public List<DetalhePerguntasDto> getPerguntas() {
         return perguntas;
     }
 }

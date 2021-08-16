@@ -17,7 +17,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -83,7 +82,7 @@ public class ProdutoController {
 
         Optional<Produto> produtoOptional = produtoRepository.findById(idProduto);
         if(produtoOptional.isEmpty()){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
 
         Produto produto = produtoOptional.get();
@@ -99,11 +98,11 @@ public class ProdutoController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/detalhes")
+    @GetMapping("/{id}")
     public ResponseEntity<DetalheProdutoDto> detalhesDoProduto(@PathVariable("id") Long id){
         Optional<Produto> produtoOptional = produtoRepository.findById(id);
         if(produtoOptional.isEmpty()){
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
         Produto produto = produtoOptional.get();
         double mediaNotas = calculadorDeNotas.calculaMediaDeNotas(produto);

@@ -23,6 +23,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Set;
 
 
@@ -43,7 +44,7 @@ public class CompraController {
     @Transactional
     public ResponseEntity<?> compraProduto(@RequestBody @Valid CompraForm form,
                                         @AuthenticationPrincipal UsuarioLogado usuarioLogado,
-                                        UriComponentsBuilder uriComponentsBuilder) throws BindException {
+                                        UriComponentsBuilder uriComponentsBuilder) throws BindException, URISyntaxException {
 
         Produto produtoEmCompra = em.find(Produto.class, form.getIdProduto());
         int quantidade = form.getQuantidade();
@@ -58,8 +59,8 @@ public class CompraController {
             em.persist(novaCompra);
             enviadorDeEmails.enviaEmail(comprador, produtoEmCompra.getDono());
 
-            return ResponseEntity.status(HttpStatus.FOUND).body(novaCompra.redirecionamentoUrl(uriComponentsBuilder));
-
+            URI uri = new URI(novaCompra.redirecionamentoUrl(uriComponentsBuilder));
+            return ResponseEntity.status(HttpStatus.FOUND).location(uri).build();
         }
 
         BindException estoqueInsuficiente = new BindException(form, "compraForm");

@@ -60,6 +60,10 @@ public class Produto {
     @OneToMany(mappedBy = "produto")
     private List<PerguntaSobreProduto> perguntas = new ArrayList<>();
 
+    //Trabalhando com Lock Otimista para impedir que a concorrência possa deixar o estoque negativo
+    @Version
+    private Long versao;
+
     @Deprecated
     public Produto() {
     }
@@ -144,7 +148,16 @@ public class Produto {
             return false;
         }
 
-        this.quantidade -= quantidade;
-        return true;
+        try{
+            this.quantidade -= quantidade;
+
+            Assert.isTrue(this.quantidade >= 0,
+                    "Opa! Estoque não pode ser negativo! " + this.quantidade);
+            return true;
+        } catch (OptimisticLockException e){
+            throw e;
+        }
+
     }
+
 }

@@ -56,7 +56,7 @@ public class OpiniaoSobreProduto {
         return descricao;
     }
 
-    public String getDonoOpiniao() {
-        return dono.getEmail();
+    public Usuario getDono() {
+        return dono;
     }
 }
